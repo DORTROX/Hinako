@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, bold } = require("discord.js");
 const Backup = require("discord-backup");
 const { MongoClient } = require('mongodb');
-const GuildTemplate = require("../../../schemas/Guild/GuildBackupSchema");
+const GuildTemplate = require("../../schemas/Guild/GuildBackupSchema");
 
 module.exports = {
   data: new SlashCommandBuilder()
