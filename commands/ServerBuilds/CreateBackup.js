@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ModalBuilder, TextI
 module.exports = { 
     data: new SlashCommandBuilder()
     .setName('create_server_backup')
-    .setDescription('Creates a clone of ther server where command is used'),
+    .setDescription('Creates a clone of the server where command is used'),
     async execute ( interaction ) {
         let MissingPerms = new EmbedBuilder()
         .setColor('Red')
@@ -15,31 +15,20 @@ module.exports = {
 
         try {
         const modal = new ModalBuilder()
-			.setCustomId('guild_backup_create')
+			.setCustomId('hidden_guild_backup_create')
 			.setTitle('Guild Backup Application');
-
-		// Add components to modal
-
-		// Create the text input components
 		const Guild_Name = new TextInputBuilder()
 			.setCustomId('GuildName')
-		    // The label is the prompt the user sees for this input
 			.setLabel("Name for your Guild Backup")
-		    // Short means only a single line of text
 			.setStyle(TextInputStyle.Short);
 
 		const Description = new TextInputBuilder()
 			.setCustomId('Description')
 			.setLabel("Describe your Guild")
-		    // Paragraph means multiple lines of text.
 			.setStyle(TextInputStyle.Paragraph);
-
-		// An action row only holds one text input,
-		// so you need one action row per text input.
 		const firstActionRow = new ActionRowBuilder().addComponents(Guild_Name);
 		const secondActionRow = new ActionRowBuilder().addComponents(Description);
 
-		// Add inputs to the modal
 		modal.addComponents(firstActionRow, secondActionRow);
         await interaction.showModal(modal)
         } catch (error) {

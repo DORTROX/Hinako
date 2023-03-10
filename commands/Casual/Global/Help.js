@@ -15,12 +15,12 @@ module.exports = {
                         {
                             label: 'Casual',
                             description: "All command Commands",
-                            value: "casual",
+                            value: "hidden_casual",
                         },
                         {
                             label: 'Fun',
                             description: "All fun Commands",
-                            value: "fun"
+                            value: "hidden_fun"
                         }
                     )
             )

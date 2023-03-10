@@ -9,21 +9,16 @@ const {
   GatewayIntentBits,
 } = require("discord.js");
 const path = require("node:path");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const Interaction = require('./handlers/InteractionHandler')
-const CommandLoader  = require('./handlers/CommandsLoader')
+const Interaction = require("./handlers/InteractionHandler");
+const CommandLoader = require("./handlers/CommandsLoader");
 
 require("dotenv").config();
 
-mongoose.connect(process.env.mongodburi, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then((m) => {
-    console.log("Connected to DB");
-  })
-  .catch((err) => console.log(err));
+/* 
+        All the Configuration goes here
+*/
 
 const Dortrox = new Client({
   intents: [
@@ -38,26 +33,38 @@ const Dortrox = new Client({
 
 Dortrox.commands = new Discord.Collection();
 
-const CommandPath = path.join(__dirname, 'commands');
+const CommandPath = path.join(__dirname, "commands");
 const commandsArray = CommandLoader(CommandPath, Dortrox.commands);
 
-const rest = new REST({ version: '10' }).setToken(process.env.token);
-
+const rest = new REST({ version: "10" }).setToken(process.env.token);
 
 (async () => {
-	try {
-		console.log(`Started refreshing ${commandsArray.length} application (/) commands.`);
+  try {
+    console.log(
+      `Started refreshing ${commandsArray.length} application (/) commands.`
+    );
 
-		const data = await rest.put(
-			Routes.applicationCommands(process.env.clientId),
-			{ body: commandsArray },
-		);
+    const data = await rest.put(
+      Routes.applicationCommands(process.env.clientId),
+      { body: commandsArray }
+    );
 
-		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-	} catch (error) {
-
-		console.error(error);
-	}
+    console.log(
+      `Successfully reloaded ${data.length} application (/) commands.`
+    );
+    mongoose.set("strictQuery", false);
+    mongoose
+      .connect(process.env.mongodburi, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+      .then((m) => {
+        console.log("Connected to DB");
+      })
+      .catch((err) => console.log(err));
+  } catch (error) {
+    console.error(error);
+  }
 })();
 
 Dortrox.once(Events.ClientReady, (c) => {
@@ -65,12 +72,10 @@ Dortrox.once(Events.ClientReady, (c) => {
 });
 
 Dortrox.on(Events.InteractionCreate, async (interaction) => {
-  console.log(interaction.member.displayName)
-  console.log(interaction.user.id)
   try {
-  await Interaction(interaction, Dortrox)
-  } catch(error) {
-    console.log(error)
+    await Interaction(interaction, Dortrox);
+  } catch (error) {
+    console.log(error);
   }
 });
 

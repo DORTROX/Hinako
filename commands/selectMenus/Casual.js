@@ -7,7 +7,7 @@ const commandsArray = CommandFetcher(CommandPath);
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("casual")
+    .setName("hidden_casual")
     .setDescription("Casual Command"),
   async execute(interaction) {
 
